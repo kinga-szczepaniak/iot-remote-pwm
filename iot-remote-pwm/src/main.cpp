@@ -44,13 +44,23 @@ uint32_t previousTime;
 uint32_t timeoutTime = 10000;
 String header;
 
-void handleClient(WiFiClient client)
-{ // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
-  // and a content-type so the client knows what's coming, then a blank line:
+void handleClient(WiFiClient client, String clientHeader)
+{
+  String redColorNum = clientHeader.substring(5, 8);
+  String greenColorNum = clientHeader.substring(9, 12);
+  String blueColorNum = clientHeader.substring(13, 16);
+
   client.println("HTTP/1.1 200 OK");
   client.println("Content-type:text/html");
   client.println("Connection: close");
   client.println();
+
+  Serial.print("redColorNum: ");
+  Serial.println(redColorNum);
+  Serial.print("greenColorNum: ");
+  Serial.println(greenColorNum);
+  Serial.print("blueColorNum: ");
+  Serial.println(blueColorNum);
 }
 
 void loop()
@@ -78,7 +88,7 @@ void loop()
           // that's the end of the client HTTP request, so send a response:
           if (currentLine.length() == 0)
           {
-            handleClient(client);
+            handleClient(client, header);
             break;
           }
           else
