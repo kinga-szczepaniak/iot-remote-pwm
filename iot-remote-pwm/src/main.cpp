@@ -46,21 +46,32 @@ String header;
 
 void handleClient(WiFiClient client, String clientHeader)
 {
-  String redColorNum = clientHeader.substring(5, 8);
-  String greenColorNum = clientHeader.substring(9, 12);
-  String blueColorNum = clientHeader.substring(13, 16);
+  String command = clientHeader.substring(5, 6);
+  String redColorNum = clientHeader.substring(7, 10);
+  String greenColorNum = clientHeader.substring(11, 14);
+  String blueColorNum = clientHeader.substring(15, 18);
 
   client.println("HTTP/1.1 200 OK");
   client.println("Content-type:text/html");
   client.println("Connection: close");
   client.println();
+  if (command == "c")
+  {
+    Serial.print("redColorNum: ");
+    Serial.println(redColorNum);
+    Serial.print("greenColorNum: ");
+    Serial.println(greenColorNum);
+    Serial.print("blueColorNum: ");
+    Serial.println(blueColorNum);
 
-  Serial.print("redColorNum: ");
-  Serial.println(redColorNum);
-  Serial.print("greenColorNum: ");
-  Serial.println(greenColorNum);
-  Serial.print("blueColorNum: ");
-  Serial.println(blueColorNum);
+    uint8_t redBrightness = redColorNum.toInt();
+    uint8_t greenBrightness = greenColorNum.toInt();
+    uint8_t blueBrightness = blueColorNum.toInt();
+
+    ledcWrite(1, redBrightness);
+    ledcWrite(2, greenBrightness);
+    ledcWrite(3, blueBrightness);
+  }
 }
 
 void loop()
@@ -109,5 +120,4 @@ void loop()
     Serial.println("Client disconnected.");
     Serial.println("");
   }
-
 }
