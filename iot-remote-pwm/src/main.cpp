@@ -1,15 +1,26 @@
 #include <Arduino.h>
+uint8_t red = 26;
+uint8_t green = 25;
+uint8_t blue = 17; 
 
-void setup() {
+void setup()
+{
   // put your setup code here, to run once:
-  pinMode(2, OUTPUT);
-}
+  ledcAttachPin(red, 1); // assign RGB led pins to channels
+  ledcAttachPin(green, 2);
+  ledcAttachPin(blue, 3);
 
+  ledcSetup(1, 600, 8); // 12 kHz PWM, 8-bit resolution
+  ledcSetup(2, 600, 8);
+  ledcSetup(3, 600, 8);
+}
 
 void loop() {
   // put your main code here, to run repeatedly:
-  digitalWrite(2, HIGH); // turn the LED on (HIGH is the voltage level)
-  delay(3);              // wait for a second
-  digitalWrite(2, LOW);  // turn the LED off by making the voltage LOW
-  delay(1);                     // wait for a second
+  ledcWrite(1, 130);
+  ledcWrite(2, 100);
+  ledcWrite(3, 160);
+  delay(2000);
+  
 }
+
